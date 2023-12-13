@@ -12,14 +12,14 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Login Pace',
           style: TextStyle(color: Colors.white),
         ),
@@ -30,28 +30,28 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 64.0),
+            SizedBox(height: 64.0),
             Container(
               margin: const EdgeInsets.all(15.0),
               height: 80.0,
-              child: const FlutterLogo(
+              child: FlutterLogo(
                 style: FlutterLogoStyle.horizontal,
                 size: 512,
               ),
             ),
             SizedBox(height: 32.0),
             TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
+              controller: _emailController,
+              decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
               ),
@@ -60,9 +60,9 @@ class LoginScreen extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   // Düğmeye tıklandığında yapılacak işlemler buraya yazılır.
-                  print('TextButton\'a tıklandı!');
+                  print('TextButton\'a tiklandi!');
                 },
-                child: const Text(
+                child: Text(
                   'Forgot Password',
                   style: TextStyle(
                     fontSize: 15,
@@ -73,33 +73,52 @@ class LoginScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Burada kullanıcı adı ve şifreyi kontrol edebilirsiniz.
-                String username = _usernameController.text;
-                String password = _passwordController.text;
+                // Boşluk kontrolü eklendi
+                String email = _emailController.text.trim();
+                String password = _passwordController.text.trim();
+
+                if (email.isEmpty || password.isEmpty) {
+                  // Boşluk kontrolü
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please enter both email and password.'),
+                    ),
+                  );
+                  return;
+                }
 
                 // Örnek olarak, basit bir kontrol yapalım.
-                if (username == 'user' && password == 'password') {
+                if (email == 'user@email.com' && password == 'password') {
                   // Kullanıcı girişi başarılı
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text('Login successful!'),
                     ),
                   );
                 } else {
                   // Kullanıcı girişi başarısız
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content:
-                          Text('Login failed. Please check your credentials.'),
+                    SnackBar(
+                      content: Text(
+                          'Login failed. Please check your email adn password.'),
                     ),
                   );
+                  return;
                 }
+
+                // Show entered email and password in the Snackbar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        'Entered Email: $email\nEntered Password: $password'),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 fixedSize: Size(250, 20),
               ),
-              child: const Text(
+              child: Text(
                 'Login',
                 style: TextStyle(
                   color: Colors.white,
@@ -107,15 +126,15 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 64.0),
+            SizedBox(height: 64.0),
             Container(
               margin: const EdgeInsets.all(0.0),
               child: TextButton(
                 onPressed: () {
                   // Düğmeye tıklandığında yapılacak işlemler buraya yazılır.
-                  print('TextButton\'a tıklandı!');
+                  print('TextButton\'a tiklandi!');
                 },
-                child: const Text(
+                child: Text(
                   'New User? Create Account',
                   style: TextStyle(fontSize: 15),
                 ),
